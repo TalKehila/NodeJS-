@@ -1,0 +1,78 @@
+
+<html>
+  <head>
+    <title>My Movies</title>
+    <script>
+      function onload() {
+        fetch("http://localhost:3000/movie")
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            let list = document.getElementById("list");
+            list.innerHTML = data.map(
+              (movie) => `
+<div>
+<h2>Movies</h2>
+<h3>${movie.name}</h3>
+<h3>${movie.year}</h3>
+<h3>${movie.description}</h3>
+ <img src ="${movie.image}" height="200" width="200" />
+ <div>
+<h3>${movie.watched}</h3> 
+<span> <input type="checkbox" id="did" onchange="checkBTN('${movie._id}', this)"> Did you watch?</span>
+</div>
+
+  <button onclick="deleteMovie('${movie._id}')">Delete</button>
+</div>
+`
+            );
+          });
+
+          
+        }
+        onload();
+     function checkBTN(id, checkbox) {
+    let watched = checkbox.checked; // Get the checked status of the checkbox
+    console.log(watched); // For debugging purposes
+}
+
+      function deleteMovie(id) {
+    fetch('http://localhost:3000/movie/' + id, {
+        method: "DELETE"
+    }).then(response =>onload());
+}
+
+
+    </script>
+  </head>
+  <body>
+    <div id="list"></div>
+    <div style="border: solid black ">
+    </div>
+    <div>
+         <form action='http://localhost:3000/movie' method="POST">
+          <label>
+            name : <input type="text" name="name">
+          </label>
+
+           <label>
+            Year : <input type="number" name="year">
+          </label>
+
+           <label>
+            description: <input type="text" name="description">
+          </label>
+
+           <label>
+            image : <input type="text" name="image">
+          </label>
+
+           <label>
+            was watched : <input type="checkbox" name="watched">
+          </label>
+          <div>
+            <button>submit</button>
+          </div>
+    </div>
+  </body>
+</html>
